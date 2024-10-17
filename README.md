@@ -12,4 +12,4 @@ Project 3: Intro to Python Part 1:
 Developed a Python-based, interactive text adventure game set in the Marvel Avengers universe. Players take on the role of a S.H.I.E.L.D. agent faced with an imminent threat, and their goal is to defeat one of the Avengers' iconic villains. Throughout the game, players make critical choices that influence the outcome, creating a dynamic and engaging experience.
 
 Project 4: Intro to Python Part 2:
-Built a Python Rock-Paper-Scissors game with object-oriented design, featuring different computer strategies like random moves, cycling, and imitation. It supports multiple rounds, tracks scores, handles invalid input, and adheres to PEP8 standards.
+Built a Python Rock-Paper-Scissors game with object-oriented design, featuring different computer strategies like random moves, cycling, and imitation. It supports multiple rounds, tracks scores, handles invalid input, and adheres to PEP8 standards. I even added Color to the various prompts and statements shown in the game.
