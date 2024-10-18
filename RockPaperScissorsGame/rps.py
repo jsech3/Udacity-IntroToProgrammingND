@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
-
 import random
 
-# Global moves list
+# moves list
 
 moves = ['rock', 'paper', 'scissors']
 
@@ -26,10 +24,18 @@ class Colors:
 
 class Player:
     def move(self):
-        return 'rock'
+        raise NotImplementedError("This "
+                                  f"method should be defined in subclasses.")
 
     def learn(self, my_move, their_move):
         pass
+
+# RockPlayer that always plays 'rock'
+
+
+class RockPlayer(Player):
+    def move(self):
+        return 'rock'
 
 # Random player
 
@@ -145,16 +151,41 @@ class Game:
             self.play_again()
 
     def play_again(self):
-        play_again = input(f"{Colors.BOLD}Do you want to play again? (Y/N): "
-                           f"{Colors.ENDC}").lower()
-        while play_again not in ['y', 'n']:
-            play_again = input(f"{Colors.WARNING}{Colors.BOLD}Invalid input. "
-                               f"Please enter 'Y' "
-                               f" or 'N': {Colors.ENDC}").lower()
+        # Ask if the user wants to play again with proper input validation
+        while True:
+            play_again = input(f"{Colors.BOLD}Want "
+                               f"to play again? (Y/N): {Colors.ENDC}").lower()
+            if play_again in ['y', 'n']:
+                break
+            print(f"{Colors.WARNING}Invalid "
+                  f"input. Please enter 'Y' or 'N'.{Colors.ENDC}")
+
         if play_again == 'y':
-            self.p1_score = 0
-            self.p2_score = 0
-            self.play_game()
+            # Ask if the user wants to use the same players with validation
+            while True:
+                same_players = input(f"{Colors.BOLD}With the "
+                                     f"same players? "
+                                     f"(Y/N): {Colors.ENDC}").lower()
+                if same_players in ['y', 'n']:
+                    break
+                print(f"{Colors.WARNING}Invalid input. Please "
+                      f"enter 'Y' or 'N'.{Colors.ENDC}")
+
+            if same_players == 'y':
+                # Reset the scores for both players before playing again
+                self.p1_score = 0
+                self.p2_score = 0
+                self.play_game()
+            else:
+                # Let the user choose new players, and reset the scores
+                player1 = choose_player(1)
+                player2 = choose_player(2)
+                self.__init__(player1, player2, rounds=5)
+                self.play_game()
+        else:
+            # End the game with a message
+            print(f"{Colors.BOLD}{Colors.OKGREEN}See ya "
+                  f"next time!{Colors.ENDC}")
 
 # Function to determine if one move beats another
 
@@ -165,7 +196,40 @@ def beats(one, two):
             (one == 'paper' and two == 'rock'))
 
 
+# Map player types to their corresponding classes
+player_types = {
+    '1': HumanPlayer,
+    '2': RockPlayer,
+    '3': RandomPlayer,
+    '4': ReflectPlayer,
+    '5': CyclePlayer
+}
+
+# Function to prompt user for player selection
+
+
+def choose_player(player_number):
+    print(f"\nChoose Player {player_number}:")
+    print("1. Human Player")
+    print("2. Rock Player (Always plays rock)")
+    print("3. Random Player (Chooses randomly)")
+    print("4. Reflect Player (Copies opponent's last move)")
+    print("5. Cycle Player (Cycles through moves)")
+
+    choice = input("Enter the number of the player you want: ")
+
+    while choice not in player_types:
+        print("Invalid choice. Please try again.")
+        choice = input("Enter the number of the player you want: ")
+
+    return player_types[choice]()
+
+
 if __name__ == '__main__':
-    # Choose your game settings here
-    game = Game(HumanPlayer(), RandomPlayer(), rounds=5)
+    # Prompt user to choose player types
+    player1 = choose_player(1)
+    player2 = choose_player(2)
+
+    # Start the game with the chosen players
+    game = Game(player1, player2, rounds=5)
     game.play_game()
